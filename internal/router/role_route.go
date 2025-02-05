@@ -10,4 +10,5 @@ func UserRoutes(app *fiber.App, roleHandler *handlers.RoleHandler) {
 	api.Post("/role", roleHandler.CreateRole)
 	api.Get("/role", roleHandler.GetAllRole)
 	api.Get("/role/:id", roleHandler.GetRoleById)
+	api.Put("/role/:id", roleHandler.UpdateRole)
 }

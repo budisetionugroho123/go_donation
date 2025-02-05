@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"errors"
+
 	"github.com/budisetionugroho123/go_donation/internal/models"
 	"gorm.io/gorm"
 )
@@ -9,9 +11,24 @@ type RoleRepository interface {
 	GetAllRole() ([]models.Role, error)
 	CreateRole(role models.Role) (models.Role, error)
 	GetRoleById(id uint) (models.Role, error)
+	UpdateRole(id uint, role models.Role) (models.Role, error)
 }
 type roleRepository struct {
 	db *gorm.DB
+}
+
+// Update implements RoleRepository.
+func (r *roleRepository) UpdateRole(id uint, role models.Role) (models.Role, error) {
+	var existingRole models.Role
+
+	// Cek apakah ID ada di database
+	if err := r.db.First(&existingRole, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return models.Role{}, errors.New("role not found")
+		}
+		return models.Role{}, err
+	}
+	return role, nil
 }
 
 // CreateRole implements RoleRepository.
