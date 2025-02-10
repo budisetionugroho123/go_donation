@@ -5,7 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func UserRoutes(app *fiber.App, roleHandler *handlers.RoleHandler) {
+func RoleRoute(app *fiber.App, roleHandler *handlers.RoleHandler) {
 	api := app.Group("/api")
 	api.Post("/role", roleHandler.CreateRole)
 	api.Get("/role", roleHandler.GetAllRole)

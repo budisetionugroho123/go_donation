@@ -9,10 +9,11 @@ type APIResponse struct {
 	Error   string      `json:"error,omitempty"`
 }
 
-func SendSuccess(c *fiber.Ctx, data interface{}) error {
+func SendSuccess(c *fiber.Ctx, message string, data interface{}) error {
 	return c.Status(fiber.StatusOK).JSON(APIResponse{
-		Status: "success",
-		Data:   data,
+		Status:  "success",
+		Message: message,
+		Data:    data,
 	})
 }
 

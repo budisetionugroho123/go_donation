@@ -1,8 +1,6 @@
 package repositories
 
 import (
-	"errors"
-
 	"github.com/budisetionugroho123/go_donation/internal/models"
 	"gorm.io/gorm"
 )
@@ -19,13 +17,18 @@ type roleRepository struct {
 
 // Update implements RoleRepository.
 func (r *roleRepository) UpdateRole(id uint, role models.Role) (models.Role, error) {
-	var existingRole models.Role
 
-	// Cek apakah ID ada di database
-	if err := r.db.First(&existingRole, id).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return models.Role{}, errors.New("role not found")
-		}
+	// var existingRole models.Role
+
+	// if err := r.db.First(&existingRole, id).Error; err != nil {
+	// 	if errors.Is(err, gorm.ErrRecordNotFound) {
+	// 		return models.Role{}, errors.New("role not found")
+	// 	}
+	// 	return models.Role{}, err
+	// }
+
+	err := r.db.Where("id", id).Updates(&role).Error
+	if err != nil {
 		return models.Role{}, err
 	}
 	return role, nil
@@ -43,7 +46,7 @@ func (r *roleRepository) CreateRole(role models.Role) (models.Role, error) {
 // GetAllRole implements RoleRepository.
 func (r *roleRepository) GetAllRole() ([]models.Role, error) {
 	var roles []models.Role
-	result := r.db.Find(&roles)
+	result := r.db.Order("id ASC").Find(&roles)
 	return roles, result.Error
 }
 
@@ -54,5 +57,5 @@ func (r *roleRepository) GetRoleById(id uint) (models.Role, error) {
 	return role, result.Error
 }
 func NewRoleRepository(db *gorm.DB) RoleRepository {
-	return &roleRepository{db: db}
+	return &roleRepository{db}
 }

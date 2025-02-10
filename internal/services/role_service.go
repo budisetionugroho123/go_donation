@@ -11,30 +11,31 @@ type roleService struct {
 }
 
 // CreateRole implements RoleService.
-func (*roleService) CreateRole(role models.Role) (models.Role, error) {
-	panic("unimplemented")
+func (s *roleService) CreateRole(role models.Role) (models.Role, error) {
+	return s.roleRepo.CreateRole(role)
 }
 
 // GetAllRole implements RoleService.
-func (*roleService) GetAllRole() (models.Role, error) {
-	panic("unimplemented")
+func (s *roleService) GetAllRole() ([]models.Role, error) {
+	return s.roleRepo.GetAllRole()
 }
 
 // GetRoleById implements RoleService.
 func (s *roleService) GetRoleById(id uint) (models.Role, error) {
-	// if id == 1 {
-	// 	return models.Role{}, errors.New("admin cannot be searched")
-	// }
 	return s.roleRepo.GetRoleById(id)
 }
 
 // UpdateRole implements RoleService.
-func (*roleService) UpdateRole(id uint, role models.Role) (models.Role, error) {
-	panic("unimplemented")
+func (s *roleService) UpdateRole(id uint, role models.Role) (models.Role, error) {
+	_, err := s.roleRepo.GetRoleById(id)
+	if err != nil {
+		return models.Role{}, err
+	}
+	return s.roleRepo.UpdateRole(id, role)
 }
 
 type RoleService interface {
-	GetAllRole() (models.Role, error)
+	GetAllRole() ([]models.Role, error)
 	CreateRole(role models.Role) (models.Role, error)
 	GetRoleById(id uint) (models.Role, error)
 	UpdateRole(id uint, role models.Role) (models.Role, error)

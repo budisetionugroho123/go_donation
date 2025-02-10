@@ -5,7 +5,6 @@ import (
 
 	"github.com/budisetionugroho123/go_donation/internal/config"
 	"github.com/budisetionugroho123/go_donation/internal/handlers"
-	"github.com/budisetionugroho123/go_donation/internal/repositories"
 	"github.com/budisetionugroho123/go_donation/internal/router"
 	"github.com/budisetionugroho123/go_donation/internal/services"
 	"github.com/budisetionugroho123/go_donation/migrations"
@@ -19,12 +18,17 @@ func main() {
 	migrations.RunMigration()
 	app := fiber.New()
 
-	roleRepo := repositories.NewRoleRepository(db)
-	serviceRepo := services.NewRoleService(db)
+	roleService := services.NewRoleService(db)
+	roleHandler := handlers.NewRoleHandler(roleService)
+	router.RoleRoute(app, roleHandler)
 
-	roleHandler := handlers.NewRoleHandler(roleRepo, serviceRepo)
+	userService := services.NewUserService(db)
+	userHandler := handlers.NewUserHandler(userService)
+	router.UserRoutes(app, userHandler)
 
-	router.UserRoutes(app, roleHandler)
+	organizationService := services.NewOrganizationService(db)
+	organizationHandler := handlers.NewOrganizationHandler(organizationService)
+	router.OrganizationRoute(app, organizationHandler)
 
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "https://localhost:3000",

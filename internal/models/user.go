@@ -5,17 +5,17 @@ import (
 )
 
 type User struct {
-	ID        uint   `gorm:"primary_key"`
-	Name      string `gorm:"type:varchar(255);not null"`
-	Email     string `gorm:"type:varchar(255);unique_index;not null"`
-	Password  string `gorm:"type:varchar(255);not null"`
-	Phone     string `gorm:"type:varchar(20)"`
-	Address   string `gorm:"type:text"`
-	RoleID    uint   `gorm:"not null"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID        uint      `gorm:"primary_key" json:"id"`
+	Name      string    `gorm:"type:varchar(255);not null" json:"name"`
+	Email     string    `gorm:"type:varchar(255);unique_index;not null" json:"email"`
+	Password  string    `gorm:"type:varchar(255);not null" json:"password"`
+	Phone     string    `gorm:"type:varchar(20)" json:"phone"`
+	Address   string    `gorm:"type:text" json:"address"`
+	RoleID    uint      `gorm:"not null" json:"role_id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 
-	Role Role `gorm:"foreignkey:RoleID"`
+	Role Role `gorm:"foreignkey:RoleID" json:"role"`
 }
 
 func (user *User) TableName() string {
